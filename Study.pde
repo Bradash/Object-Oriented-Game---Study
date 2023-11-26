@@ -1,24 +1,28 @@
-Letter[] letters = new Letter[100];
+ArrayList<Letter> letters;
+
+
 //Initialize Score
 int Score;
 boolean kill;
-
 void setup(){
   size(400, 400);
-  for (int i = 0; i < 99; i++) {
     //Letter Arrays
-    letters[i] = new Letter();
-  }
+    letters = new ArrayList<Letter>();
+     
 }
 
 void draw() {
   background(75, 65, 50);
-    
+     letters.add(new Letter()); 
   rectMode(CENTER);
   rect(200, 200, 200, 300);
-  for (int i = 0; i < 10; i++) {
-    letters[i].display();
-     letters[i].kill();
+  for (int i = letters.size()-1; i >= 10; i--) {
+    Letter a = letters.get(i);
+    a.display();
+    if (a.kill()) {
+      letters.remove(i);
+      Score++;
+    }
   }
   //Display of score
   println(Score);
@@ -49,11 +53,10 @@ class Letter {
     text(c, xpos + 10, ypos + 13);
    
   }
-    void kill() {
-      //If the mouse is within the range of the area and mouse is pressed then the color changes and a point is added.
-     if(mouseX > xpos && mouseX < xpos + 20 && mouseY > ypos && mouseY < ypos + 20 && mousePressed == true){
-     rect(xpos, ypos, 20, 20);
-     Score ++;
-     }
+    boolean kill() {
+    if (mouseX > xpos && mouseX < xpos + 20 && mouseY > ypos && mouseY < ypos + 20 && mousePressed) {
+      return true; // Signal that the letter should be removed
+    }
+    return false;
   }
 }
