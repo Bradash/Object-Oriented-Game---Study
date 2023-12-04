@@ -1,5 +1,5 @@
 ArrayList<Letter> letters;
-
+Rain[] drops = new Rain[64];
 
 //Initialize Score
 int Score;
@@ -11,6 +11,7 @@ int ExpectedScore;
 int ActualLimit;
 boolean GameStart;
 int Multiplier;
+int RainDown;
 
 void setup(){
   size(400, 400);
@@ -20,33 +21,53 @@ void setup(){
     LetterAmount = 1;
     ExpectedScore = 5;
     GameStart = false;
+    for(int i = 0; i < drops.length; i ++) {
+      drops[i] = new Rain();
+}
 }
 
 void draw() {
   background(75, 65, 50);
   if(GameStart == false){
+
     rectMode(CENTER);
     noStroke();
+    //Background
     fill(90, 90, 110);
     rect(200, 125, 400, 250);
     fill(60, 60, 100);
     rect(200, 125, 300, 200);
-    
+//Rain
+    for (int i = 0; i < drops.length; i++) {
+      drops[i].display();
+      drops[i].move();
+      if(GameStart == true){
+        break;
+      }
+    }
+
+    //Body
     fill(100, 150, 100);
     ellipse(200, 240, 150, 200);
     
-
+//Table
     fill(75, 65, 50);
     rect(200, 350, 300, 200);
-    
+    //Head and Hands
     fill(175, 150, 100);
     circle(200, 150, 100);
     circle(275, 250, 50);
     circle(125, 250, 50);
-    
+    //eyes
     fill(0);
     rect(175, 150, 30, 10);
     rect(225, 150, 30, 10);
+    
+    ellipse(200, 115, 100, 50);
+    ellipse(150, 150, 15, 75);
+    ellipse(250, 150, 15, 75);
+    triangle(200, 115, 250, 115, 250, 150);
+    triangle(200, 115, 150, 115, 150, 150);
     
     fill(50, 100, 200, 200);
     ellipse(225, 165, 10, 15);
@@ -90,6 +111,7 @@ void draw() {
  //Game is true
   if(GameStart == true){
 
+    //MAIN GAMEPLAY
   //Letter arrays are limited to the LetterAmount variable
   if (letters.size() < LetterAmount){
      letters.add(new Letter(Time)); 
@@ -106,11 +128,26 @@ void draw() {
     fill(175);
   rectMode(CENTER);
   rect(200, 200, 200, 300);
+  
+ //Letters on Paper
   drawLetters();
   //If you get all letters letters reset
  if(LetterAmount <= 0){
     LetterAmount =+ 1*Multiplier;
   }
+  //Hand
+  
+  fill(100, 100, 0, 125);
+  noStroke();
+  triangle(mouseX, mouseY, mouseX + 40, mouseY + 75, mouseX + 60, mouseY + 75);
+  fill(0, 0, 0, 100);
+  circle(mouseX, mouseY, 10);
+    fill(175, 150, 100, 240);
+circle(mouseX+75, mouseY+100, 100);
+fill(100, 150, 100);
+triangle(mouseX + 100, mouseY + 60, mouseX + + + 100, mouseY + 140, 800, 800);
+
+  //HUD and UI
   //Display Score
   println(Time);
   fill(255);
@@ -150,50 +187,5 @@ void drawLetters(){
       letters.remove(i);
       Score++;
     }
-  }
-}
-    
-
-class Letter {
-  //Initialize positions for the letters
-  
-  
-  float xpos;
-  float ypos;
-  float xspeed;
-  char c;
-  float sizeUp;
-  
- 
- Letter() {
-  xpos = random(125, 275);
-  ypos = random(75, 325);
-  c = (char) int(random(33, 127));
-}
-  Letter(int Size) {
-  sizeUp = sin(Size/10);
-  xpos = random(125, 275);
-  ypos = random(75, 325);
-  c = (char) int(random(33, 127));
-}
-
-  void display() {
-    
-    rectMode(CORNER);
-    stroke(0);
-    fill(255);
-    rect(xpos, ypos, 20 + sizeUp, 20 + sizeUp);
-    fill(0);
-    textSize(10 + sizeUp);
-    textAlign(CENTER);
-    text(c, xpos + 10, ypos + 13);
-  }
-  
-    boolean kill() {
-    if (mouseX > xpos && mouseX < xpos + 20 && mouseY > ypos && mouseY < ypos + 20 && mousePressed) {
-      LetterAmount --;
-      return true;
-    }
-    return false;
   }
 }
