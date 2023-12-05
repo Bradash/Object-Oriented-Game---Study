@@ -12,6 +12,7 @@ int ActualLimit;
 boolean GameStart;
 int Multiplier;
 int RainDown;
+int ColorText;
 
 void setup(){
   size(400, 400);
@@ -20,6 +21,7 @@ void setup(){
     TimeLimit =+ ActualLimit;
     LetterAmount = 1;
     ExpectedScore = 5;
+    //Game starts on main menu
     GameStart = false;
     for(int i = 0; i < drops.length; i ++) {
       drops[i] = new Rain();
@@ -58,11 +60,11 @@ void draw() {
     circle(200, 150, 100);
     circle(275, 250, 50);
     circle(125, 250, 50);
-    //eyes
+    //Eyes
     fill(0);
     rect(175, 150, 30, 10);
     rect(225, 150, 30, 10);
-    
+    //Hair
     ellipse(200, 115, 100, 50);
     ellipse(150, 150, 15, 75);
     ellipse(250, 150, 15, 75);
@@ -71,41 +73,75 @@ void draw() {
     
     fill(50, 100, 200, 200);
     ellipse(225, 165, 10, 15);
-    
+    //Text Study
     fill(255);
     textSize(50);
     text("Study", 200, 75);
     
-    
-    
+    stroke(5);
+
     //Easy, Normal, Hard buttons
     fill(175);
-    
     rect(200, 325, 100, 125);
-    
+       rectMode(CORNER);
+    for (int y = 260; y < 390; y = y + 10){  
+    for (int x = 300; x < 380; x = x + 10){
+      rect(x, y, 10, 10);
+    }
+  }  
+         rectMode(CENTER);
     fill(0);
     textSize(25);
     textAlign(CENTER);
     text("Easy", 200, 290);
     text("Normal", 200, 325);
     text("Hard", 200, 360);
-    //Easy Mode button
-    if (dist(mouseX, mouseY, 200, 280) < 25 && mousePressed) {
+
+    switch (ColorText){
+          //Easy Mode is hovered over
+      case 1:
+      fill(0,255,0);
+      text("Easy", 200, 290);
+        if (mousePressed) {
       println(millis());
       GameStart = true;
       ActualLimit = 30000;
     }
-    //Normal Mode button
-    if (dist(mouseX, mouseY, 200, 325) < 25 && mousePressed) {
+      break;
+          //Normal Mode is hovered over
+      case 2:
+      fill(255,255,0);
+      text("Normal", 200, 325);
+          if (mousePressed) {
       println(millis());
       GameStart = true;
       ActualLimit = 15000;
-      //Hard Mode button
+      
     }
-    if (dist(mouseX, mouseY, 200, 350) < 25 && mousePressed) {
+      break;
+      
+      case 3:
+          //Hard Mode is hovered over
+      fill(255,0,0);
+      text("Hard", 200, 360);
+          if (mousePressed) {
       println(millis());
       GameStart = true;
       ActualLimit = 10000;
+    }
+      break;
+    }
+    //Easy Mode Check if mouse is hovering over
+    if (dist(mouseX, mouseY, 200, 280) < 25) {
+      ColorText = 1;
+    }
+    //Normal Mode Check if mouse is hovering over
+    if (dist(mouseX, mouseY, 200, 325) < 25) {
+      ColorText = 2;
+    //Hard Mode Check if mouse is hovering over
+    }
+    if (dist(mouseX, mouseY, 200, 350) < 25) {
+      ColorText = 3;
     }
   }
  //Game is true
@@ -121,7 +157,7 @@ void draw() {
     //Time resets everytime it hits 0
   if(TimeLimit <= Time){
     Multiplier = Multiplier + 1;
-    ExpectedScore = ExpectedScore + 5*Multiplier;
+    ExpectedScore = AddMultiplier(ExpectedScore);
     TimeLimit = ActualLimit + millis();
   }
     //Paper
@@ -188,4 +224,9 @@ void drawLetters(){
       Score++;
     }
   }
+}
+// Function return type for expected score
+int AddMultiplier(int Val){  
+  Val = Val + 5*Multiplier;
+  return Val;
 }
